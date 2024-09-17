@@ -31,9 +31,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
     compileOnly 'org.projectlombok:lombok'
+
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.9.1'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.9.1'
+
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
