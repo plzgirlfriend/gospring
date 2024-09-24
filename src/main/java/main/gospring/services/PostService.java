@@ -24,7 +24,7 @@ public class PostService {
     // author mapping
     private final UserRepository userRepository;
 
-    private User getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
 
         // 현재 인증된 사용자 정보 가져오기(반복해서 쓸 거 같아 여기 구현)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -1,8 +1,11 @@
 package main.gospring.Jwt;
 
-import io.jsonwebtoken.*;
-import org.springframework.stereotype.Service;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import main.gospring.model.User;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -11,8 +14,9 @@ import java.util.Date;
 @Service
 public class TokenProvider {
 
-    // secret key
-    private static final String SECRET_KEY = "asdasdmasdasbdamndbsamdnbqwdqdqwdiwrbqwfbjkdb12jk3SADCSADQWDWDQWDDWDASSADSXaASDASDAS";
+    // secretKey
+    @Value("${jwt.secretKey}")
+    private String SECRET_KEY;
 
 //    // token 생성
 //    public String generateToken(User user) {

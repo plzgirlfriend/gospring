@@ -18,8 +18,20 @@ public class PostController {
     
     private final PostService postService;
     private final UserService userService;
+
+//    @GetMapping("/api/current-user")
+//    public ResponseEntity<CurrentUserResponse> getCurrentUser() {
+//
+//        User currentUser = postService.getAuthenticatedUser();
+//
+//        CurrentUserResponse currentUserResponse = CurrentUserResponse.builder()
+//                .username(currentUser.getUsername())
+//                .build();
+//
+//        return ResponseEntity.status(200).body(currentUserResponse);
+//    }
     
-    // Post 생성 
+    // Post 생성
     @PostMapping("/api/post")
     public ResponseEntity<Post> createPost(@RequestBody CreatePostRequest dto) {
 

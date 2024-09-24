@@ -35,6 +35,7 @@ public class UserController {
         return "인증 성공!";
     }
 
+
     // Use userService.save
     @PostMapping("/api/signup")
     public ResponseEntity<SignupUserResponse> signup(@RequestBody SignupUserRequest signupUserRequest) {
