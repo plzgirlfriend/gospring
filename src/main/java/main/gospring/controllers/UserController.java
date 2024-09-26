@@ -49,8 +49,8 @@ public class UserController {
         return ResponseEntity.status(200).body(signupUserResponse);
     }
 
-        @PostMapping("/api/login")
-        public ResponseEntity<LoginUserResponse> login(@RequestBody LoginUserRequest loginUserRequest) {
+    @PostMapping("/api/login")
+    public ResponseEntity<LoginUserResponse> login(@RequestBody LoginUserRequest loginUserRequest) {
 
            // User 검증
            User user = userServiceImpl.loadUserByUsername(loginUserRequest.getUsername());

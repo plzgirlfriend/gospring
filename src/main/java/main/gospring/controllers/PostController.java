@@ -3,10 +3,10 @@ package main.gospring.controllers;
 import lombok.RequiredArgsConstructor;
 import main.gospring.dto.post.CreatePostRequest;
 import main.gospring.dto.post.PostListResponse;
+import main.gospring.dto.post.PostResponse;
 import main.gospring.dto.post.UpdatePostRequest;
 import main.gospring.model.Post;
 import main.gospring.services.PostService;
-import main.gospring.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,6 @@ import java.util.List;
 public class PostController {
     
     private final PostService postService;
-    private final UserService userService;
 
 //    @GetMapping("/api/current-user")
 //    public ResponseEntity<CurrentUserResponse> getCurrentUser() {
@@ -31,7 +30,7 @@ public class PostController {
 //        return ResponseEntity.status(200).body(currentUserResponse);
 //    }
     
-    // Post 생성
+    // Post 생성 api
     @PostMapping("/api/post")
     public ResponseEntity<Post> createPost(@RequestBody CreatePostRequest dto) {
 
@@ -40,7 +39,7 @@ public class PostController {
         return ResponseEntity.status(201).body(post);
     }
 
-    // Post 조회 
+    // Post 조회 api
     @GetMapping("/api/posts")
     public ResponseEntity<List<PostListResponse>> getAllPosts() {
 
@@ -53,14 +52,22 @@ public class PostController {
     }
 
     @GetMapping("/api/post/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
+    public ResponseEntity<PostResponse> getPostById(@PathVariable Long id) {
 
         Post post = postService.lookUpPost(id);
 
-        return ResponseEntity.status(201).body(post);
+        // User author의 Lazy Loading이기 때문에 dto로 전달해보자
+        PostResponse postResponse = PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .author(post.getAuthor().getUsername())
+                .build();
+
+        return ResponseEntity.status(201).body(postResponse);
     }
 
-    // Post 삭제
+    // Post 삭제 api
     @DeleteMapping("/api/delete-post/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
 
@@ -69,7 +76,7 @@ public class PostController {
         return ResponseEntity.status(204).build();
     }
 
-    // Post 수정
+    // Post 수정 api
     @PutMapping("/api/update-post/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable Long id, @RequestBody UpdatePostRequest dto) {
 
