@@ -1,6 +1,8 @@
 package main.gospring.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import main.gospring.dto.comment.CommentListResponse;
 import main.gospring.dto.comment.CreateCommentRequest;
 import main.gospring.dto.comment.UpdateCommentRequest;
 import main.gospring.model.Comment;
@@ -14,8 +16,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -39,8 +44,10 @@ public class CommentService {
         // 현재 로그인한 사용자
         User author = getAuthenticatedUser();
 
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾지 못했습니다."));
+
 
         Comment comment = Comment.builder()
                 .author(author)
@@ -61,38 +68,69 @@ public class CommentService {
 //
 //    }
 
+    // Comment 조회
+    public List<CommentListResponse> findCommentsByPost(Long postId) {
+
+        // postId로 게시물 찾기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+
+
+        // post에 달린 댓글 리스트 조회
+        List<Comment> comments = commentRepository.findByPost(post);
+        
+        log.info("댓글 조회 실행");
+
+        // CommentListResponse로 변환하여 반환
+        return comments.stream()
+                .map(CommentListResponse::new)
+                .toList();
+    }
+
+
     // Comment 삭제
     public void delete(Long id){
 
         // 현재 로그인한 사용자
         User author = getAuthenticatedUser();
 
+        String username = author.getUsername();
+
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("댓글 삭제할 id를 찾지 못했습니다."));
 
         // 현재 로그인한 사용자와 comment 생성한 사용자가 다를 때
-        if(!comment.getAuthor().equals(author)){
+        if(!comment.getAuthor().getUsername().equals(username)){
             throw new IllegalArgumentException("댓글을 작성한 사용자가 아닙니다. (delete)");
         }
 
+        log.info("댓글 삭제 실행");
+        
         commentRepository.delete(comment);
     }
 
     @Transactional
-    public Comment update(Long id, UpdateCommentRequest dto){
+    public Comment update(Long postId, Long commentId, UpdateCommentRequest dto){
 
         // 현재 로그인한 사용자
         User author = getAuthenticatedUser();
 
-        Comment comment = commentRepository.findById(id)
+        String username = author.getUsername();
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+
+        Comment comment = commentRepository.findByPostAndId(post, commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글 수정할 id를 찾지 못했습니다."));
 
         // 현재 로그인한 사용자와 comment 생성한 사용자가 다를 때
-        if(!comment.getAuthor().equals(author)){
+        if(!comment.getAuthor().getUsername().equals(username)){
             throw new IllegalArgumentException("댓글 작성한 사용자가 아닙니다. (update)");
         }
 
         comment.update(dto.getContent());
+
+        log.info("댓글 수정 실행");
 
         return comment;
     }

@@ -19,7 +19,6 @@ public class Comment {
     @Column(name = "content", nullable = false)
     private String content;
 
-    // 근데 이게 뭐지? ManyToOne은 알겠는데 나중에 test해보자
     // Post에서는 몰랐는데 join하니까 import에 선언 안 해줘도 상관 없는 건가?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_author", nullable = false)
@@ -27,7 +26,7 @@ public class Comment {
 
     // 어떤 post에 달리는지도 알아야함
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_in_comment_id", nullable = false)
     private Post post;
 
 

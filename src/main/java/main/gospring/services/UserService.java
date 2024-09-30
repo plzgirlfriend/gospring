@@ -35,5 +35,4 @@ public class UserService {
     public boolean validatePassword(String rawPassword, String encodedPassword) {
         return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
     }
-
 }

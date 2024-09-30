@@ -27,7 +27,7 @@ public class PostService {
     public User getAuthenticatedUser() {
 
         // 현재 인증된 사용자 정보 가져오기(반복해서 쓸 거 같아 여기 구현)
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
         return userRepository.findByUsername(username)
@@ -116,10 +116,7 @@ public class PostService {
             throw new IllegalArgumentException("PostService update error: username mismatch");
         }
 
-        post.update(
-                dto.getTitle(),
-                dto.getContent()
-        );
+        post.update(dto.getTitle(), dto.getContent());
 
         return post;
     }

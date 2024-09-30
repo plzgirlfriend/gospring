@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Table(name = "goSpring_post")
 @Entity
 @Getter
@@ -28,6 +30,15 @@ public class Post {
 
     @Column(name = "post_content", nullable = false)
     private String content;
+
+    // Post, Comment relationship
+    // comment가 남아있을 때 post를 삭제하면 같이 comment도 같이 삭제
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments;
+
+//    @OneToMany
+//    @JoinColumn()
+//    private Comment comment;
 
     @Builder
     public Post(String title, String content, User author) {

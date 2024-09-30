@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Table(name = "goSpring_user")
 @Entity
@@ -39,7 +38,7 @@ public class User implements UserDetails {
 
     @Column(name="user_password", nullable = false)
     private String password;
-//
+
 //    @Column(name="nickname", nullable = false, unique=true)
 //    private String nickname;z
 
